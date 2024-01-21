@@ -1,11 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import HomePage from './HomePagee'
+import HomePage from "./HomePagee";
+import RoomJoinPage from "./RoomJoinPage";
 
 const App = () => {
-  return <>
-    <HomePage />
-  </>
+  return (
+    <>
+      <HomePage />
+      <RoomJoinPage />
+    </>
+  );
 };
 
 // select app div by id
@@ -17,7 +21,7 @@ if (appDiv !== null) {
   // render app component
   root.render(<App />);
 } else {
-  console.log('App div not found')
+  console.log("App div not found");
 }
 
 export default App;
