@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import HomePage from './HomePagee'
 
 const App = () => {
-  return <div></div>;
+  return <>
+    <HomePage />
+  </>
 };
 
 // select app div by id
