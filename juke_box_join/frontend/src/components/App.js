@@ -1,15 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import HomePage from "./HomePagee";
-import RoomJoinPage from "./RoomJoinPage";
-import CreateRoom from "./CreateRoom";
 
 const App = () => {
   return (
     <>
       <HomePage />
-      <RoomJoinPage />
-      <CreateRoom />
     </>
   );
 };
