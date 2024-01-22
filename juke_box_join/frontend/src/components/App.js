@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";
 import HomePage from "./HomePagee";
 
 const App = () => {
   return (
     <>
-      <HomePage />
+      <Router>
+        <HomePage />
+      </Router>
     </>
   );
 };
