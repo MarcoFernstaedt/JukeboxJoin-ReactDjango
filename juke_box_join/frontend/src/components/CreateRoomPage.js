@@ -27,7 +27,7 @@ const CreateRoomPage = () => {
     const requestOptions = {
       method: "POST",
       headers: {
-        'Content-Type': "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         guest_can_pause: guestCanPause,
@@ -35,14 +35,18 @@ const CreateRoomPage = () => {
       }),
     };
 
-    fetch('/api/create-room', requestOptions)
+    fetch("/api/create-room", requestOptions)
       .then((res) => {
         if (res.ok) {
-          console.log(res.json())
+          res.json();
         }
-      }).catch((err) => {
-        console.error(err)
       })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
