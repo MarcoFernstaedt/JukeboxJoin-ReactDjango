@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -14,6 +14,7 @@ const CreateRoomPage = () => {
   const [guestCanPause, setGuestCanPause] = useState(true);
   const defaultVotes = 2;
   const [votesToSkip, setVotesToSkip] = useState(defaultVotes);
+  const navagate = useNavigate();
 
   const handleVotesChange = (e) => {
     setVotesToSkip(e.target.value);
@@ -38,11 +39,11 @@ const CreateRoomPage = () => {
     fetch("/api/create-room", requestOptions)
       .then((res) => {
         if (res.ok) {
-          res.json();
+          return res.json();
         }
       })
       .then((data) => {
-        console.log(data);
+        navagate(`/room/${data.code}`);
       })
       .catch((err) => {
         console.error(err);

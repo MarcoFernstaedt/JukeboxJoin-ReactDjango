@@ -13,7 +13,7 @@ const Room = () => {
   }, []);
 
   const getRoomDetails = () => {
-    fetch('/api/get-room' + '?code=' + roomCode)
+    fetch(`/api/get-room?code=${roomCode}`)
       .then((res) => {
         if (res.ok) {
           return res.json()
