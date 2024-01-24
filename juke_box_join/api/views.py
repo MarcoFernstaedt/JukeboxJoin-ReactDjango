@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -33,3 +33,21 @@ class CreateRoomView(APIView):
         
         # Return a 400 response if the data is invalid
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
+    
+class GetRoom(APIView):
+    serializer_class = RoomSerializer
+    lookup_url_kwarg = 'code'
+
+    def get(self, request, format=None):
+        code = request.GET.get(self.lookup_url_kwarg)
+        if code is not None:
+            try:
+                room = get_object_or_404(Room, code=code)
+                data = RoomSerializer(room).data
+                data['is_host'] = request.session.session_key == room.host
+                return Response(data, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        return Response({'error': 'Code parameter not found'}, status=status.HTTP_400_BAD_REQUEST)
+                
