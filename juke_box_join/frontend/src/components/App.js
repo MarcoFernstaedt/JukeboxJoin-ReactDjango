@@ -5,11 +5,11 @@ import HomePage from "./HomePagee";
 
 const App = () => {
   return (
-    <>
-      <Router>
+    // <div className="center">
+      <Router className='center'>
         <HomePage />
       </Router>
-    </>
+    // </div>
   );
 };
 
