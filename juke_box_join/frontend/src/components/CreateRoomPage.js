@@ -16,15 +16,15 @@ const CreateRoomPage = () => {
   const [votesToSkip, setVotesToSkip] = useState(defaultVotes);
   const navagate = useNavigate();
 
-  const handleVotesChange = (e) => {
+  const _handleVotesChange = (e) => {
     setVotesToSkip(e.target.value);
   };
 
-  const handleGuestCanPauseChange = (e) => {
+  const _handleGuestCanPauseChange = (e) => {
     setGuestCanPause(e.target.value === "true" ? true : false);
   };
 
-  const handleCreateRoomButton = () => {
+  const _handleCreateRoomButton = () => {
     const requestOptions = {
       method: "POST",
       headers: {
@@ -65,7 +65,7 @@ const CreateRoomPage = () => {
           <RadioGroup
             row
             defaultValue="true"
-            onChange={handleGuestCanPauseChange}
+            onChange={_handleGuestCanPauseChange}
           >
             <FormControlLabel
               value="true"
@@ -92,7 +92,7 @@ const CreateRoomPage = () => {
               min: 1,
               style: { textAlign: "center" },
             }}
-            onChange={handleVotesChange}
+            onChange={_handleVotesChange}
           />
           <FormHelperText sx={{ textAlign: "center" }}>
             Votes Required to Skip Song
@@ -103,7 +103,7 @@ const CreateRoomPage = () => {
         <Button
           color="primary"
           variant="contained"
-          onClick={handleCreateRoomButton}
+          onClick={_handleCreateRoomButton}
         >
           Create A Room
         </Button>
