@@ -4,7 +4,7 @@ import { TextField, Button, Grid, Typography } from "@mui/material";
 
 const RoomJoinPage = () => {
   const [roomCode, setRoomCode] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState({});
   const navigate = useNavigate();
 
   const _handleTextFieldChange = (e) => {
@@ -13,9 +13,26 @@ const RoomJoinPage = () => {
 
   const _handleRoomJoin = () => {
     console.log("Join room with code:", roomCode);
-    // Here, add logic to validate and join the room,
-    // and then navigate to the room page, if successful.
-    // navigate(`/room/${roomCode}`);
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        code: roomCode
+      })
+    }
+    fetch('/api/join-room', requestOptions)
+      .then((res) => {
+        if (res.ok) {
+          navigate(`/room/${roomCode}`)
+        } else {
+          setError({error: 'Room Not Found'})
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   };
 
   return (
@@ -32,7 +49,7 @@ const RoomJoinPage = () => {
           placeholder="Enter a Room Code"
           value={roomCode}
           onChange={_handleTextFieldChange}
-          helperText={error}
+          helperText={error.message}
           variant="outlined"
         />
       </Grid>
