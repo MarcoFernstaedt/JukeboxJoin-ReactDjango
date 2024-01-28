@@ -11,18 +11,23 @@ const HomePagee = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("/api/user-in-room")
+    fetch("/api/check-room")
       .then((res) => {
         if (res.ok) {
           // Corrected typo here
           return res.json();
+        } else {
+          throw new Error("Failed to fetch room data");
         }
       })
       .then((data) => {
-        if (data.code) {
+        if (data && data.code) {
           setRoomCode(data.code);
           navigate(`/room/${data.code}`);
         }
+      })
+      .catch((err) => {
+        console.error("Error", err);
       });
   }, [navigate]);
 
