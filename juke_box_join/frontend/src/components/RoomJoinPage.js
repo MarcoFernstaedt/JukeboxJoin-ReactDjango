@@ -12,27 +12,26 @@ const RoomJoinPage = () => {
   };
 
   const _handleRoomJoin = () => {
-    console.log("Join room with code:", roomCode);
     const requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        code: roomCode
-      })
-    }
-    fetch('/api/join-room', requestOptions)
+        code: roomCode,
+      }),
+    };
+    fetch("/api/join-room", requestOptions)
       .then((res) => {
         if (res.ok) {
-          navigate(`/room/${roomCode}`)
+          navigate(`/room/${roomCode}`);
         } else {
-          setError({error: 'Room Not Found'})
+          setError({ error: "Room Not Found" });
         }
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   };
 
   return (
@@ -59,7 +58,7 @@ const RoomJoinPage = () => {
         </Button>
       </Grid>
       <Grid item xs={12} sx={{ textAlign: "center" }}>
-        <Button variant="contained" color="secondary" to='/' component={Link}>
+        <Button variant="contained" color="secondary" to="/" component={Link}>
           Back
         </Button>
       </Grid>
