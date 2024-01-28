@@ -7,14 +7,12 @@ import Room from "./Room";
 import { Grid, Button, ButtonGroup, Typography } from "@mui/material";
 
 const HomePagee = () => {
-  const [roomCode, setRoomCode] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     fetch("/api/check-room")
       .then((res) => {
         if (res.ok) {
-          // Corrected typo here
           return res.json();
         } else {
           throw new Error("Failed to fetch room data");
@@ -22,7 +20,6 @@ const HomePagee = () => {
       })
       .then((data) => {
         if (data && data.code) {
-          setRoomCode(data.code);
           navigate(`/room/${data.code}`);
         }
       })
