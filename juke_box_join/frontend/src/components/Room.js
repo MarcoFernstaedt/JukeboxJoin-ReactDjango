@@ -10,23 +10,6 @@ const Room = () => {
 
   const { roomCode } = useParams();
 
-  const _handleLeaveRoom = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    fetch("/api/leave-room", requestOptions).then((res) => {
-      if (res.ok) {
-        navigate("/");
-      }
-    });
-  };
-
-  useEffect(() => {
-    getRoomDetails();
-  }, []);
-
   const getRoomDetails = () => {
     fetch(`/api/get-room?code=${roomCode}`)
       .then((res) => {
@@ -44,10 +27,47 @@ const Room = () => {
       });
   };
 
+  const _handleLeaveRoom = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    fetch("/api/leave-room", requestOptions).then((res) => {
+      if (res.ok) {
+        navigate("/");
+      }
+    });
+  };
+
+  const _handleOpenSettings = () => {
+    navigate("/settings", { state: { roomCode: roomCode } });
+  };
+
+  useEffect(() => {
+    getRoomDetails();
+    fetch("/api/is-host")
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Responce Failed");
+        }
+      })
+      .then((data) => {
+        if (data && data.host) {
+          setIsHost(data.host);
+        }
+      })
+      .catch((err) => {
+        console.error("Error", err);
+      });
+  }, []);
+
   return (
     <Grid container spacing={1}>
       <Grid item xs={12} sx={{ textAlign: "center" }}>
-        <Typography varient="h4" component="h4">
+        <Typography variant="h4" component="h4">
           Code: {roomCode}
         </Typography>
       </Grid>
@@ -66,19 +86,19 @@ const Room = () => {
           Votes To Skip: {String(votesToSkip)}
         </Typography>
       </Grid>
+      {isHost && (
+        <Grid item xs={12} sx={{ textAlign: "center" }}>
+          <Button color="primary" onClick={_handleOpenSettings}>
+            Settings
+          </Button>
+        </Grid>
+      )}
       <Grid item xs={12} sx={{ textAlign: "center" }}>
         <Button color="secondary" onClick={_handleLeaveRoom}>
           Leave Room
         </Button>
       </Grid>
     </Grid>
-
-    // <div>
-    //   <p>Room Code: {roomCode}</p>
-    //   <p>Host: {String(isHost)}</p>
-    //   <p>Guest Can Pause: {String(guestCanPause)}</p>
-    //   <p>Votes to Skip: {votesToSkip}</p>
-    // </div>
   );
 };
 
