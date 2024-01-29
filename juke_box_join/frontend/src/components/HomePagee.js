@@ -1,15 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import RoomJoinPage from "./RoomJoinPage";
 import CreateRoomPage from "./CreateRoomPage";
+import SettingsPage from "./SettingsPage";
 import PageNotFound from "./PageNotFound";
 import Room from "./Room";
 import { Grid, Button, ButtonGroup, Typography } from "@mui/material";
 
 const HomePagee = () => {
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (
+      location.pathname.startsWith("/room/") ||
+      location.pathname === "/settings"
+    ) {
+      return;
+    }
+
     fetch("/api/check-room")
       .then((res) => {
         if (res.ok) {
@@ -55,7 +70,8 @@ const HomePagee = () => {
       />
       {/* Other Routes */}
       <Route path="/join" element={<RoomJoinPage />} />
-      <Route path="/create" element={<CreateRoomPage />} />
+      <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/create/" element={<CreateRoomPage />} />
       <Route path="/room/:roomCode" element={<Room />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
