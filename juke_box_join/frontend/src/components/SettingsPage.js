@@ -46,9 +46,9 @@ const SettingsPage = () => {
         if (res.ok) {
           return res.json();
         }
-        return res.text().then((text) => {
-          throw new Error(text);
-        });
+        // return res.text().then((text) => {
+        //   throw new Error(text);
+        // });
       })
       .then((data) => {
         navigate(`/room/${data.code}`);
