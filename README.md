@@ -20,5 +20,6 @@ Jukebox Join is a web application designed for parties, friend groups, and small
 
 - **React**: A robust front-end framework for building user interfaces.
 - **Django**: A high-level Python web framework that encourages rapid development and clean, pragmatic design.
+- **Django RestAPI**: API Development.
 - **SQLite**: Used for storing room information and other relevant data.
 - **CORS**: Implements Cross-Origin Resource Sharing for enhanced API security.
