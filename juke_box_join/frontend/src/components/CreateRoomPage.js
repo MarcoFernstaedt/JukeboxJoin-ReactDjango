@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   Button,
   Grid,
@@ -12,10 +12,13 @@ import {
   FormControlLabel,
 } from "@mui/material";
 
-const CreateRoomPage = () => {
+const CreateRoomPage = (props) => {
   const [guestCanPause, setGuestCanPause] = useState(true);
   const defaultVotes = 2;
   const [votesToSkip, setVotesToSkip] = useState(defaultVotes);
+  const location = useLocation();
+  const roomCode = location.state ? location.state.roomCode : null;
+  const isUpdateMode = !!roomCode;
   const navigate = useNavigate();
 
   const _handleVotesChange = (e) => {
@@ -43,20 +46,69 @@ const CreateRoomPage = () => {
         if (res.ok) {
           return res.json();
         }
+        return res.text().then((text) => {
+          throw new Error(text);
+        });
       })
       .then((data) => {
         navigate(`/room/${data.code}`);
       })
       .catch((err) => {
-        console.error(err);
+        console.error("Error:", err);
       });
   };
+
+  const getRoomDetails = () => {
+    fetch(`/api/get-room?code=${roomCode}`)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("Bad Request");
+      })
+      .then((data) => {
+        setGuestCanPause(data.guest_can_pause);
+        setVotesToSkip(data.votes_to_skip);
+      })
+      .catch((err) => {
+        console.error("Error", err);
+      });
+  };
+
+  const _handleUpdateSettings = () => {
+    const requestOptions = {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        guest_can_pause: guestCanPause,
+        votes_to_skip: votesToSkip,
+      }),
+    };
+
+    fetch("/api/update-room", requestOptions)
+      .then((res) => {
+        if (res.ok) {
+          navigate(`/room/${roomCode}`);
+        } else {
+          throw new Error("Bad Request");
+        }
+      })
+      .catch((err) => {
+        console.error("Error", err);
+      });
+  };
+
+  useEffect(() => {
+    if (roomCode) {
+      getRoomDetails();
+    }
+  }, [roomCode]);
 
   return (
     <Grid container spacing={1}>
       <Grid item xs={12} sx={{ textAlign: "center" }}>
         <Typography component="h4" variant="h4">
-          Create A Room
+          {isUpdateMode ? "Settings" : "Create A Room"}
         </Typography>
       </Grid>
       <Grid item xs={12} sx={{ textAlign: "center" }}>
@@ -105,14 +157,16 @@ const CreateRoomPage = () => {
         <Button
           color="primary"
           variant="contained"
-          onClick={_handleCreateRoomButton}
+          onClick={
+            isUpdateMode ? _handleUpdateSettings : _handleCreateRoomButton
+          }
         >
-          Create A Room
+          {isUpdateMode ? "Update" : "Create A Room"}
         </Button>
       </Grid>
       <Grid item xs={12} sx={{ textAlign: "center" }}>
         <Button color="secondary" variant="contained" to="/" component={Link}>
-          Back
+          {isUpdateMode ? "Cancel" : "Back"}
         </Button>
       </Grid>
     </Grid>
