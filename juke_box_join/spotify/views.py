@@ -1,8 +1,9 @@
-from django.shortcuts import render
-from requests import post
+from django.shortcuts import redirect
+from requests import Request, post
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from .utils.utils import update_or_create_token
 import os
 
 class AuthUrl(APIView):
@@ -42,16 +43,10 @@ class SpotifyCallback(APIView):
 
         if error:
             return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not self.request.session.exists(self.request.session.session_key):
+            request.session.create()
 
-        return Response({
-            'access_token': access_token,
-            'token_type': token_type,
-            'refresh_token': refresh_token,
-            'expires_in': expires_in
-        }, status=status.HTTP_200_OK)
- 
+        update_or_create_token(session_id=request.session.session_key, access_token=access_token, expires_in=expires_in, refresh_token=refresh_token, token_type=token_type)
 
-def roteate_slope(arr, slope):
-    sloped_array = []
-    for arr[slope] in arr:
-        return sloped_array.append(arr[slope])
+        return redirect('frontend:')
