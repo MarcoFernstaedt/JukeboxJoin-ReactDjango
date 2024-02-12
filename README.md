@@ -23,3 +23,4 @@ Jukebox Join is a web application designed for parties, friend groups, and small
 - **Django RestAPI**: API Development.
 - **SQLite**: Used for storing room information and other relevant data.
 - **CORS**: Implements Cross-Origin Resource Sharing for enhanced API security.
+- **Spotify API**: Allows users to stream music.
